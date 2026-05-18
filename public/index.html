@@ -452,7 +452,7 @@ document.getElementById('subSubmit').addEventListener('click', async () => {
   document.getElementById('subSubmit').disabled = true;
   document.getElementById('subSubmit').textContent = 'Subscribing...';
   try {
-    await fetch('https://muth-1.app.n8n.cloud/webhook/13b5f55a-be6a-444d-81f5-f6a9cabbea1e', {
+    await fetch('/api/subscribe', {
       method: 'POST',
       headers: {'Content-Type':'application/json'},
       body: JSON.stringify({ email })
