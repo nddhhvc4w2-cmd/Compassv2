@@ -10,13 +10,14 @@ module.exports = async function handler(req, res) {
   }
 
   try {
-    const url = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/LatestScan!A2?key=${API_KEY}`;
+    const url = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/LatestScan!A:A?key=${API_KEY}`;
     const r = await fetch(url);
     if (!r.ok) throw new Error('Could not read from Google Sheets.');
     const data = await r.json();
-    const raw = data?.values?.[0]?.[0];
-    if (!raw) return res.status(404).json({ error: 'No scan data found.' });
-    return res.status(200).json(JSON.parse(raw));
+    const rows = data?.values || [];
+    const lastRow = rows[rows.length - 1]?.[0];
+    if (!lastRow) return res.status(404).json({ error: 'No scan data found.' });
+    return res.status(200).json(JSON.parse(lastRow));
   } catch (err) {
     return res.status(500).json({ error: err.message });
   }
