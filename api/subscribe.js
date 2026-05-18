@@ -9,7 +9,7 @@ module.exports = async function handler(req, res) {
   if (!email) return res.status(400).json({ error: 'Email required' });
  
   try {
-    await fetch('https://muth-1.app.n8n.cloud/webhook/13b5f55a-be6a-444d-81f5-f6a9cabbea1e', {
+    await fetch('https://muth-t.app.n8n.cloud/webhook/13b5f55a-be6a-444d-81f5-f6a9cabbea1e', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ email }),
