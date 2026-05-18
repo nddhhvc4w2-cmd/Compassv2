@@ -127,6 +127,14 @@ textarea:focus{border-color:var(--border-hover)}
 .conf-high{color:var(--green)}
 .conf-medium{color:var(--amber)}
 .conf-low{color:var(--muted)}
+
+@media print {
+  .site-header, .hero, .divider, #subscribeBar, .custom-scan-section, .loading, .error, #customResults, #customDetail, .matrix-legend, .matrix-hint, .section-header .section-sub, #printBtn { display: none !important; }
+  body { background: white; color: black; padding: 1rem; }
+  .exec-card, .pattern-card, .quadrant, .sig-card, .detail { border-color: #ccc; background: white; }
+  .wrap { max-width: 100%; }
+  .matrix-grid { gap: 4px; }
+}
 </style>
 </head>
 <body>
@@ -142,8 +150,8 @@ textarea:focus{border-color:var(--border-hover)}
     </div>
     <div style="display:flex;flex-direction:column;align-items:flex-end;gap:8px">
       <div style="display:flex;align-items:center;gap:10px">
-        <span class="header-tag">Updated weekly</span>
         <button class="run-btn" id="subBtn" style="padding:5px 14px;font-size:12px">Subscribe</button>
+      <button onclick="window.print()" style="background:none;border:1px solid var(--border);color:var(--muted);border-radius:var(--radius-sm);padding:5px 14px;font-size:12px;cursor:pointer;font-family:'DM Sans',sans-serif;display:flex;align-items:center;gap:6px">Download this week's intelligence</button>
       </div>
       <div id="subForm" style="display:none;flex-direction:column;gap:6px;align-items:flex-end">
         <input type="email" id="subEmail" placeholder="Your email address" style="width:220px;margin-bottom:0;font-size:13px;padding:8px 12px" />
@@ -441,7 +449,7 @@ document.getElementById('subBtn').addEventListener('click', () => {
 });
 
 document.getElementById('subSubmit').addEventListener('click', async () => {
-  const email = document.getElementById('subEmail').value.trim().replace(/^=+/, '');
+  const email = document.getElementById('subEmail').value.trim();
   const msg = document.getElementById('subMsg');
   if (!email || !email.includes('@')) {
     msg.textContent = 'Please enter a valid email address.';
