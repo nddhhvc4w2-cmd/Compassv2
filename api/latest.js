@@ -10,7 +10,7 @@ module.exports = async function handler(req, res) {
   }
 
   try {
-    const url = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/LatestScan!B2?key=${API_KEY}`;
+    const url = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/LatestScan!A2?key=${API_KEY}`;
     const r = await fetch(url);
     if (!r.ok) throw new Error('Could not read from Google Sheets.');
     const data = await r.json();
