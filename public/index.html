@@ -91,6 +91,8 @@ textarea:focus{border-color:var(--border-hover)}
 .legend-text strong{color:var(--text);font-weight:500;display:block;margin-bottom:1px}
 .matrix-grid{display:grid;grid-template-columns:1fr 1fr;gap:2px;background:var(--border);border-radius:var(--radius);overflow:hidden;margin-bottom:6px}
 .quadrant{background:var(--surface);padding:1rem;min-height:200px}
+[id$="-q-amplify"]{background:#0f1f12}
+[id$="-q-adopt"]{background:#0f1520}
 .q-header{margin-bottom:12px;padding-bottom:10px;border-bottom:1px solid var(--border)}
 .q-name{font-size:14px;font-weight:500;margin-bottom:2px}
 .q-tagline{font-size:12px;color:var(--muted)}
@@ -212,10 +214,10 @@ const Q_META = {
 };
 
 const LEGEND = [
-  {color:'var(--green)', label:'Amplify',    desc:'Strong signals. Act on these now.'},
   {color:'var(--amber)', label:'Anticipate', desc:'Emerging trends. Get ahead of them.'},
-  {color:'var(--blue)',  label:'Adopt',      desc:'Proven solutions. Start this week.'},
+  {color:'var(--green)', label:'Amplify',    desc:'Strong signals. Act on these now.'},
   {color:'var(--muted)', label:'Explore',    desc:'Worth watching. Not urgent yet.'},
+  {color:'var(--blue)',  label:'Adopt',      desc:'Proven solutions. Start this week.'},
 ];
 
 const STEPS = [
