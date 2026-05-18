@@ -140,13 +140,26 @@ textarea:focus{border-color:var(--border-hover)}
         <p class="logo-sub">Strategic Intelligence for Global Development</p>
       </div>
     </div>
-    <span class="header-tag">Updated weekly</span>
+    <div style="display:flex;flex-direction:column;align-items:flex-end;gap:8px">
+      <div style="display:flex;align-items:center;gap:10px">
+        <span class="header-tag">Updated weekly</span>
+        <button class="run-btn" id="subBtn" style="padding:5px 14px;font-size:12px">Subscribe</button>
+      </div>
+      <div id="subForm" style="display:none;flex-direction:column;gap:6px;align-items:flex-end">
+        <input type="email" id="subEmail" placeholder="Your email address" style="width:220px;margin-bottom:0;font-size:13px;padding:8px 12px" />
+        <button class="run-btn" id="subSubmit" style="padding:6px 16px;font-size:12px">Submit &rarr;</button>
+      </div>
+      <p id="subMsg" style="font-size:12px;color:var(--green);display:none;text-align:right"></p>
+    </div>
   </div>
 
   <div class="hero">
     <h1 class="hero-headline">The signals that matter,<br><em>already organized for you.</em></h1>
     <p class="hero-body">Every week, Compass scans thousands of sources across 8 domains of global development — and surfaces what leaders need to act on, watch, and scale. No noise. No reading required. Just intelligence.</p>
   </div>
+
+  <!-- Subscribe bar -->
+
 
   <!-- Latest weekly scan -->
   <div class="latest-section">
@@ -419,6 +432,44 @@ function toggleDetail(sig, domainMap, detailEl, prefix) {
   detailEl.style.display = 'block';
   detailEl.scrollIntoView({behavior:'smooth', block:'nearest'});
 }
+
+// Subscribe
+document.getElementById('subBtn').addEventListener('click', () => {
+  const form = document.getElementById('subForm');
+  form.style.display = form.style.display === 'none' ? 'flex' : 'none';
+  if (form.style.display === 'flex') document.getElementById('subEmail').focus();
+});
+
+document.getElementById('subSubmit').addEventListener('click', async () => {
+  const email = document.getElementById('subEmail').value.trim();
+  const msg = document.getElementById('subMsg');
+  if (!email || !email.includes('@')) {
+    msg.textContent = 'Please enter a valid email address.';
+    msg.style.color = 'var(--red)';
+    msg.style.display = 'block';
+    return;
+  }
+  document.getElementById('subSubmit').disabled = true;
+  document.getElementById('subSubmit').textContent = 'Subscribing...';
+  try {
+    await fetch('https://muth-1.app.n8n.cloud/webhook/13b5f55a-be6a-444d-81f5-f6a9cabbea1e', {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({ email })
+    });
+    msg.textContent = "You're in. Look out for your first brief next Monday.";
+    msg.style.color = 'var(--green)';
+    msg.style.display = 'block';
+    document.getElementById('subEmail').value = '';
+  } catch(err) {
+    msg.textContent = 'Something went wrong. Please try again.';
+    msg.style.color = 'var(--red)';
+    msg.style.display = 'block';
+  } finally {
+    document.getElementById('subBtn').disabled = false;
+    document.getElementById('subBtn').textContent = 'Subscribe →';
+  }
+});
 </script>
 </body>
 </html>
