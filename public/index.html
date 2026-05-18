@@ -129,11 +129,19 @@ textarea:focus{border-color:var(--border-hover)}
 .conf-low{color:var(--muted)}
 
 @media print {
-  .site-header, .hero, .divider, #subscribeBar, .custom-scan-section, .loading, .error, #customResults, #customDetail, .matrix-legend, .matrix-hint, .section-header .section-sub, #printBtn { display: none !important; }
-  body { background: white; color: black; padding: 1rem; }
-  .exec-card, .pattern-card, .quadrant, .sig-card, .detail { border-color: #ccc; background: white; }
+  .site-header, .hero, .divider, #subscribeBar, .loading, .error,
+  #customResults, #customDetail, #latestDetail,
+  .domains-grid, .domains-hint, .focus-label, textarea, .run-btn,
+  .section-header, hr, .matrix-hint { display: none !important; }
+  .latest-section { display: block !important; }
+  #latestResults { display: block !important; }
+  body { background: white; color: black; padding: 1rem; font-family: Georgia, serif; }
+  .exec-card, .pattern-card, .quadrant, .sig-card { border-color: #ccc !important; background: white !important; }
+  .exec-summary, .pattern-desc, .sig-sowhat, .sig-title { color: black !important; }
   .wrap { max-width: 100%; }
   .matrix-grid { gap: 4px; }
+  .q-name, .pattern-title { color: black !important; }
+  .muted, .dim { color: #555 !important; }
 }
 </style>
 </head>
