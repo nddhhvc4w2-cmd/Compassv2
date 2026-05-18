@@ -11,45 +11,45 @@ module.exports = async function handler(req, res) {
   const TAVILY_KEY = process.env.TAVILY_API_KEY;
   const ANTHROPIC_KEY = process.env.ANTHROPIC_API_KEY;
   if (!TAVILY_KEY || !ANTHROPIC_KEY) {
-    return res.status(500).json({ error: 'Missing API keys.' });
+    return res.status(500).json({ error: 'Missing API keys. Check environment variables.' });
   }
 
   const QUERIES = [
-    `latest innovation signals global health longevity development 2026`,
-    `emerging education technology future skills development 2026`,
-    `water security innovation climate adaptation 2026`,
-    `philanthropy innovative finance global development 2026`,
-    `food systems agriculture innovation climate resilience 2026`,
-    `clean energy transition innovation developing countries 2026`,
-    `social cohesion human development innovation 2026`,
-    `biodiversity conservation technology innovation 2026`,
+    `innovation signals global health longevity 2026`,
+    `education technology future skills development 2026`,
+    `water food security climate adaptation innovation 2026`,
+    `clean energy social innovation philanthropy 2026`,
   ];
 
   try {
-    const allResults = [];
-    for (const query of QUERIES) {
-      const r = await fetch('https://api.tavily.com/search', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          api_key: TAVILY_KEY,
-          query: `${query} ${focusArea}`,
-          search_depth: 'basic',
-          max_results: 3,
-          include_answer: false,
-        }),
-      });
-      if (r.ok) {
-        const d = await r.json();
-        allResults.push({ query, results: d.results || [] });
-      }
-    }
+    // Step 1: Tavily search (4 queries in parallel)
+    const searchResults = await Promise.all(
+      QUERIES.map(q =>
+        fetch('https://api.tavily.com/search', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            api_key: TAVILY_KEY,
+            query: q + ' ' + focusArea,
+            search_depth: 'basic',
+            max_results: 4,
+            include_answer: false,
+          }),
+        })
+        .then(r => r.ok ? r.json() : { results: [] })
+        .catch(() => ({ results: [] }))
+      )
+    );
 
-    const evidencePack = allResults.map(({ query, results }) =>
-      `QUERY: ${query}\n` +
-      results.map((r, i) => `[${i+1}] ${r.title}\n${r.content}\nSource: ${r.url}`).join('\n\n')
+    // Step 2: Format evidence
+    const evidencePack = searchResults.map((data, i) =>
+      `QUERY: ${QUERIES[i]}\n` +
+      (data.results || []).map((r, j) =>
+        `[${j+1}] ${r.title}\n${r.content?.slice(0, 300)}\nSource: ${r.url}`
+      ).join('\n\n')
     ).join('\n\n---\n\n');
 
+    // Step 3: Claude analysis
     const claudeRes = await fetch('https://api.anthropic.com/v1/messages', {
       method: 'POST',
       headers: {
@@ -58,51 +58,69 @@ module.exports = async function handler(req, res) {
         'anthropic-version': '2023-06-01',
       },
       body: JSON.stringify({
-        model: 'claude-sonnet-4-20250514',
-        max_tokens: 1000,
-        system: `You are Compass, a strategic foresight intelligence agent. Analyze only the provided evidence and return ONLY valid JSON — no markdown, no explanation.
+        model: 'claude-sonnet-4-5',
+        max_tokens: 4000,
+        system: `You are Compass, a strategic foresight intelligence agent. Analyze only the provided evidence and return ONLY valid JSON — no markdown, no explanation, just the raw JSON object.
 
 Matrix placement:
 - amplify: Novel AND immediately strategic — act now
-- anticipate: Novel, high potential — watch carefully  
+- anticipate: Novel, high potential — watch carefully
 - adopt: Proven, actionable — implement now
 - explore: Interesting but uncertain — monitor
 
-Return exactly this structure:
+Return exactly this JSON structure:
 {
-  "executiveSummary": "3-4 sentences",
+  "executiveSummary": "3-4 sentences on the current landscape",
   "runDate": "${new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}",
-  "crossCuttingPatterns": [{"title":"...","description":"..."}],
-  "signals": [{
-    "id": "s1",
-    "title": "5-8 word title",
-    "domain": "health|education|food|water|energy|biodiversity|social|philanthropy",
-    "quadrant": "amplify|anticipate|adopt|explore",
-    "confidenceTier": "high|medium|low",
-    "strategicImplication": "max 12 words",
-    "summary": "2-3 sentences",
-    "whyItMatters": "1-2 sentences",
-    "recommendedAction": "specific action",
-    "evidenceSources": [{"title":"...","url":"...","sourceName":"..."}]
-  }]
+  "crossCuttingPatterns": [
+    {"title":"pattern title","description":"one sentence insight"}
+  ],
+  "signals": [
+    {
+      "id": "s1",
+      "title": "5-8 word signal title",
+      "domain": "health|education|food|water|energy|biodiversity|social|philanthropy",
+      "quadrant": "amplify|anticipate|adopt|explore",
+      "confidenceTier": "high|medium|low",
+      "strategicImplication": "max 12 words",
+      "summary": "2-3 sentences",
+      "whyItMatters": "1-2 sentences",
+      "recommendedAction": "specific action",
+      "evidenceSources": [{"title":"...","url":"...","sourceName":"..."}]
+    }
+  ]
 }
 
-Rules: 8-12 signals, min 2 per quadrant, exactly 3 patterns. Only use evidence provided. No invented sources.`,
+Rules: 6-10 signals total, at least 1 per quadrant, exactly 3 patterns. Only use evidence provided.`,
         messages: [{
           role: 'user',
-          content: `Focus area: ${focusArea}\n\nEvidence:\n\n${evidencePack}`,
+          content: `Focus area: ${focusArea}\n\nEvidence:\n\n${evidencePack}\n\nReturn only the JSON object.`,
         }],
       }),
     });
 
     const claudeData = await claudeRes.json();
-    const text = claudeData.content.filter(b => b.type === 'text').map(b => b.text).join('\n');
-    const match = text.match(/\{[\s\S]*\}/);
-    if (!match) throw new Error('Could not parse Claude response as JSON.');
-    const result = JSON.parse(match[0]);
 
+    if (claudeData.error) {
+      throw new Error(`Claude error: ${claudeData.error.message}`);
+    }
+    if (!claudeData.content) {
+      throw new Error(`Unexpected response: ${JSON.stringify(claudeData).slice(0, 200)}`);
+    }
+
+    const text = claudeData.content
+      .filter(b => b.type === 'text')
+      .map(b => b.text)
+      .join('\n');
+
+    const match = text.match(/\{[\s\S]*\}/);
+    if (!match) throw new Error('Could not parse JSON from Claude response.');
+
+    const result = JSON.parse(match[0]);
     return res.status(200).json(result);
+
   } catch (err) {
+    console.error('[Compass]', err);
     return res.status(500).json({ error: err.message || 'Internal server error' });
   }
-}
+};
