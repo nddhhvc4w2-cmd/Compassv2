@@ -441,7 +441,7 @@ document.getElementById('subBtn').addEventListener('click', () => {
 });
 
 document.getElementById('subSubmit').addEventListener('click', async () => {
-  const email = document.getElementById('subEmail').value.trim();
+  const email = document.getElementById('subEmail').value.trim().replace(/^=+/, '');
   const msg = document.getElementById('subMsg');
   if (!email || !email.includes('@')) {
     msg.textContent = 'Please enter a valid email address.';
