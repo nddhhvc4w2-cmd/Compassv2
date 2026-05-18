@@ -11,18 +11,19 @@ module.exports = async function handler(req, res) {
   const TAVILY_KEY = process.env.TAVILY_API_KEY;
   const ANTHROPIC_KEY = process.env.ANTHROPIC_API_KEY;
   if (!TAVILY_KEY || !ANTHROPIC_KEY) {
-    return res.status(500).json({ error: 'Missing API keys. Check environment variables.' });
+    return res.status(500).json({ error: 'Missing API keys.' });
   }
 
   const QUERIES = [
-    `innovation signals global health longevity 2026`,
-    `education technology future skills development 2026`,
-    `water food security climate adaptation innovation 2026`,
-    `clean energy social innovation philanthropy 2026`,
+    `global health longevity innovation 2026`,
+    `education technology skills development 2026`,
+    `water food security climate adaptation 2026`,
+    `clean energy biodiversity innovation 2026`,
+    `social cohesion philanthropy innovative finance 2026`,
+    `human development resilience innovation 2026`,
   ];
 
   try {
-    // Step 1: Tavily search (4 queries in parallel)
     const searchResults = await Promise.all(
       QUERIES.map(q =>
         fetch('https://api.tavily.com/search', {
@@ -41,7 +42,6 @@ module.exports = async function handler(req, res) {
       )
     );
 
-    // Step 2: Format evidence
     const evidencePack = searchResults.map((data, i) =>
       `QUERY: ${QUERIES[i]}\n` +
       (data.results || []).map((r, j) =>
@@ -49,7 +49,6 @@ module.exports = async function handler(req, res) {
       ).join('\n\n')
     ).join('\n\n---\n\n');
 
-    // Step 3: Claude analysis
     const claudeRes = await fetch('https://api.anthropic.com/v1/messages', {
       method: 'POST',
       headers: {
@@ -60,64 +59,63 @@ module.exports = async function handler(req, res) {
       body: JSON.stringify({
         model: 'claude-sonnet-4-5',
         max_tokens: 4000,
-        system: `You are Compass, a strategic foresight intelligence agent. Analyze only the provided evidence and return ONLY valid JSON — no markdown, no explanation, just the raw JSON object.
+        system: `You are Compass, a strategic intelligence agent briefing senior leaders in philanthropy and global development.
 
-Matrix placement:
-- amplify: Novel AND immediately strategic — act now
-- anticipate: Novel, high potential — watch carefully
-- adopt: Proven, actionable — implement now
-- explore: Interesting but uncertain — monitor
+From the evidence provided, identify exactly 12 signals — the 3 highest-impact ones in each quadrant:
 
-Return exactly this JSON structure:
+AMPLIFY (3 signals): Opportunities with strong evidence that leaders should scale RIGHT NOW
+ANTICIPATE (3 signals): Emerging trends not mainstream yet — leaders need to get ahead of them
+ADOPT (3 signals): Proven solutions already working — leaders should start implementing this week
+EXPLORE (3 signals): Interesting signals worth monitoring — not urgent but don't ignore them
+
+Pick the best 3 per quadrant from across all 8 domains: health, education, food, water, energy, biodiversity, social, philanthropy.
+
+Writing rules — this is non-negotiable:
+- Write like you're briefing a smart, busy CEO who has 2 minutes
+- Zero jargon. Zero filler. Every word earns its place.
+- Be specific. Real names, figures, dates from the evidence.
+- "soWhat" must be one plain English sentence a 15-year-old understands
+
+Return ONLY valid JSON, no markdown, no explanation:
 {
-  "executiveSummary": "3-4 sentences on the current landscape",
+  "executiveSummary": "3-4 plain sentences. What is happening right now that matters.",
   "runDate": "${new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}",
   "crossCuttingPatterns": [
-    {"title":"pattern title","description":"one sentence insight"}
+    {"title": "short bold title", "description": "one plain sentence — what connects across domains"}
   ],
   "signals": [
     {
       "id": "s1",
-      "title": "5-8 word signal title",
+      "title": "bold 5-8 word title",
       "domain": "health|education|food|water|energy|biodiversity|social|philanthropy",
       "quadrant": "amplify|anticipate|adopt|explore",
       "confidenceTier": "high|medium|low",
-      "strategicImplication": "max 12 words",
-      "summary": "2-3 sentences",
-      "whyItMatters": "1-2 sentences",
-      "recommendedAction": "specific action",
-      "evidenceSources": [{"title":"...","url":"...","sourceName":"..."}]
+      "soWhat": "One plain English sentence. Why should a busy leader care?",
+      "summary": "2-3 sentences. What is happening and where.",
+      "whyItMatters": "1-2 sentences. Direct relevance to the focus area.",
+      "recommendedAction": "One specific action. Start with a verb.",
+      "evidenceSources": [{"title": "...", "url": "...", "sourceName": "..."}]
     }
   ]
 }
 
-Rules: 6-10 signals total, at least 1 per quadrant, exactly 3 patterns. Only use evidence provided.`,
+Rules: exactly 12 signals (3 per quadrant), exactly 3 patterns. Only use evidence provided. No invented sources.`,
         messages: [{
           role: 'user',
-          content: `Focus area: ${focusArea}\n\nEvidence:\n\n${evidencePack}\n\nReturn only the JSON object.`,
+          content: `Focus area: ${focusArea}\n\nEvidence:\n\n${evidencePack}\n\nReturn only the JSON.`,
         }],
       }),
     });
 
     const claudeData = await claudeRes.json();
+    if (claudeData.error) throw new Error(`Claude error: ${claudeData.error.message}`);
+    if (!claudeData.content) throw new Error(`Unexpected response: ${JSON.stringify(claudeData).slice(0, 200)}`);
 
-    if (claudeData.error) {
-      throw new Error(`Claude error: ${claudeData.error.message}`);
-    }
-    if (!claudeData.content) {
-      throw new Error(`Unexpected response: ${JSON.stringify(claudeData).slice(0, 200)}`);
-    }
-
-    const text = claudeData.content
-      .filter(b => b.type === 'text')
-      .map(b => b.text)
-      .join('\n');
-
+    const text = claudeData.content.filter(b => b.type === 'text').map(b => b.text).join('\n');
     const match = text.match(/\{[\s\S]*\}/);
     if (!match) throw new Error('Could not parse JSON from Claude response.');
 
-    const result = JSON.parse(match[0]);
-    return res.status(200).json(result);
+    return res.status(200).json(JSON.parse(match[0]));
 
   } catch (err) {
     console.error('[Compass]', err);
