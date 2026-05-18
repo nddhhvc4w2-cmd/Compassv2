@@ -3,36 +3,66 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Compass · Strategic Foresight</title>
-<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet"/>
+<title>Foresight Innovation Compass</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet"/>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{--bg:#0d0f14;--surface:#151820;--surface-2:#1c2030;--border:rgba(255,255,255,0.07);--border-hover:rgba(255,255,255,0.14);--text:#e8eaf0;--muted:#7a8099;--dim:#4a5066;--amber:#d4943a;--blue:#4a8fd4;--green:#4aad7a;--red:#d45a5a;--purple:#8b7dd4;--teal:#3aada8;--radius:10px;--radius-sm:6px}
 body{font-family:'DM Sans',system-ui,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:3rem 1.5rem 6rem}
-.wrap{width:100%;max-width:820px}
+.wrap{width:100%;max-width:860px}
+
+/* Header */
+.site-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:3rem;padding-bottom:1.5rem;border-bottom:1px solid var(--border)}
+.logo{display:flex;align-items:center;gap:12px}
+.logo-icon{width:38px;height:38px;border:1px solid rgba(212,148,58,0.35);border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:19px;color:var(--amber);flex-shrink:0}
+.logo-text{}
+.logo-name{font-family:'DM Serif Display',serif;font-size:20px;line-height:1.2}
+.logo-sub{font-size:11px;color:var(--muted);letter-spacing:.03em}
+.header-tag{font-size:11px;color:var(--dim);background:var(--surface);border:1px solid var(--border);padding:4px 10px;border-radius:20px}
 
 /* Hero */
-.hero{margin-bottom:2.5rem;padding-bottom:2.5rem;border-bottom:1px solid var(--border)}
-.logo{display:flex;align-items:center;gap:10px;margin-bottom:1rem}
-.logo-icon{width:36px;height:36px;border:1px solid rgba(212,148,58,0.35);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:18px;color:var(--amber)}
-.logo-name{font-family:'DM Serif Display',serif;font-size:24px}
-.hero-headline{font-size:18px;font-weight:500;line-height:1.5;margin-bottom:8px}
-.hero-sub{font-size:14px;color:var(--muted);line-height:1.65;max-width:560px}
+.hero{margin-bottom:3rem}
+.hero-headline{font-family:'DM Serif Display',serif;font-size:32px;line-height:1.3;margin-bottom:12px;max-width:600px}
+.hero-headline em{color:var(--amber);font-style:italic}
+.hero-body{font-size:15px;color:var(--muted);line-height:1.75;max-width:580px}
 
-/* Input */
-.input-section{margin-bottom:2rem}
+/* Section headers */
+.section-header{display:flex;align-items:baseline;gap:10px;margin-bottom:1rem}
+.section-title{font-size:13px;font-weight:500;color:var(--text);text-transform:uppercase;letter-spacing:.08em}
+.section-sub{font-size:12px;color:var(--dim)}
+
+/* Pre-loaded scan */
+.latest-section{margin-bottom:3rem}
+.latest-loading{display:flex;align-items:center;gap:10px;padding:1.25rem;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);font-size:13px;color:var(--muted)}
+.mini-spinner{width:14px;height:14px;border:2px solid var(--border-hover);border-top-color:var(--amber);border-radius:50%;animation:spin .7s linear infinite;flex-shrink:0}
+.latest-empty{padding:1.25rem;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);font-size:13px;color:var(--dim);text-align:center}
+
+/* Divider */
+.divider{border:none;border-top:1px solid var(--border);margin:3rem 0}
+
+/* Domain checklist */
+.domains-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:8px;margin-bottom:1.25rem}
+.domain-check{display:flex;align-items:center;gap:10px;padding:10px 14px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-sm);cursor:pointer;transition:all .15s;user-select:none}
+.domain-check:hover{border-color:var(--border-hover)}
+.domain-check.selected{border-color:rgba(212,148,58,0.5);background:rgba(212,148,58,0.07)}
+.domain-check input{display:none}
+.check-box{width:16px;height:16px;border:1px solid var(--dim);border-radius:4px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:10px;color:transparent;transition:all .15s}
+.domain-check.selected .check-box{background:var(--amber);border-color:var(--amber);color:#1a0f00}
+.domain-icon{font-size:15px;flex-shrink:0}
+.domain-label{font-size:13px;color:var(--muted)}
+.domain-check.selected .domain-label{color:var(--text)}
+
+/* Focus input */
 .focus-label{display:block;font-size:11px;font-weight:500;color:var(--dim);text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px}
 textarea{width:100%;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-sm);padding:12px 14px;font-family:'DM Sans',sans-serif;font-size:14px;color:var(--text);outline:none;resize:vertical;transition:border-color .2s;margin-bottom:10px;line-height:1.6}
 textarea::placeholder{color:var(--dim)}
 textarea:focus{border-color:var(--border-hover)}
-.examples-label{font-size:12px;color:var(--dim);margin-bottom:8px}
-.chips{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px}
-.chip{background:none;border:1px solid var(--border);border-radius:20px;padding:5px 12px;font-size:12px;color:var(--muted);cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .15s}
-.chip:hover{border-color:rgba(212,148,58,0.4);color:var(--amber)}
-.run-btn{background:var(--amber);color:#1a0f00;border:none;border-radius:var(--radius-sm);padding:12px 28px;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:500;cursor:pointer;transition:opacity .15s,transform .1s}
+.input-row{display:flex;gap:10px;align-items:flex-start;margin-bottom:6px}
+.run-btn{background:var(--amber);color:#1a0f00;border:none;border-radius:var(--radius-sm);padding:12px 28px;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:500;cursor:pointer;transition:opacity .15s,transform .1s;white-space:nowrap}
 .run-btn:hover:not(:disabled){opacity:.9}
 .run-btn:active:not(:disabled){transform:scale(.98)}
 .run-btn:disabled{opacity:.4;cursor:not-allowed}
+.domains-hint{font-size:12px;color:var(--dim);margin-bottom:1.25rem}
 
 /* Loading */
 .loading{display:none;flex-direction:column;align-items:center;gap:14px;padding:3rem;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);margin-top:1.5rem;text-align:center}
@@ -40,41 +70,31 @@ textarea:focus{border-color:var(--border-hover)}
 @keyframes spin{to{transform:rotate(360deg)}}
 .load-step{font-size:14px;color:var(--muted)}
 .load-note{font-size:12px;color:var(--dim)}
-
 .error{display:none;padding:1rem 1.25rem;background:rgba(212,90,90,0.1);border:1px solid rgba(212,90,90,0.2);border-radius:var(--radius);color:var(--red);font-size:14px;margin-top:1.5rem}
 
-/* Results */
+/* Results shared */
 .results{display:none;margin-top:1.5rem}
-
 .exec-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:1.5rem;margin-bottom:1.25rem}
 .exec-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px}
-.exec-label{font-size:11px;font-weight:500;color:var(--dim);text-transform:uppercase;letter-spacing:.08em;margin-bottom:3px}
+.exec-meta-label{font-size:11px;font-weight:500;color:var(--dim);text-transform:uppercase;letter-spacing:.08em;margin-bottom:3px}
 .exec-date{font-size:12px;color:var(--muted)}
 .signal-badge{font-size:12px;color:var(--muted);background:var(--surface-2);padding:4px 10px;border-radius:20px;white-space:nowrap}
 .exec-summary{font-size:15px;line-height:1.75;color:var(--text)}
-
-.section-label{font-size:11px;font-weight:500;color:var(--dim);text-transform:uppercase;letter-spacing:.08em;margin-bottom:10px}
-
 .patterns-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:8px;margin-bottom:2rem}
 .pattern-card{background:var(--surface);border:1px solid var(--border);border-left:3px solid var(--amber);border-radius:var(--radius);padding:1rem 1.1rem}
 .pattern-title{font-size:13px;font-weight:500;margin-bottom:5px}
 .pattern-desc{font-size:13px;color:var(--muted);line-height:1.6}
-
-/* Matrix */
-.matrix-intro{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:1rem 1.25rem;margin-bottom:1rem;display:flex;gap:1.5rem;flex-wrap:wrap}
-.legend-item{display:flex;align-items:flex-start;gap:8px;flex:1;min-width:160px}
+.matrix-legend{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:1rem 1.25rem;margin-bottom:1rem;display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px}
+.legend-item{display:flex;align-items:flex-start;gap:8px}
 .legend-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;margin-top:5px}
 .legend-text{font-size:12px;color:var(--muted);line-height:1.5}
 .legend-text strong{color:var(--text);font-weight:500;display:block;margin-bottom:1px}
-
 .matrix-grid{display:grid;grid-template-columns:1fr 1fr;gap:2px;background:var(--border);border-radius:var(--radius);overflow:hidden;margin-bottom:6px}
 .quadrant{background:var(--surface);padding:1rem;min-height:200px}
 .q-header{margin-bottom:12px;padding-bottom:10px;border-bottom:1px solid var(--border)}
 .q-name{font-size:14px;font-weight:500;margin-bottom:2px}
 .q-tagline{font-size:12px;color:var(--muted)}
-.matrix-hint{font-size:12px;color:var(--dim);text-align:center;margin-bottom:1.5rem}
-
-/* Signal cards */
+.matrix-hint{font-size:12px;color:var(--dim);text-align:center;margin-bottom:1rem}
 .sig-card{padding:10px 12px;background:var(--surface-2);border:0.5px solid var(--border);border-radius:var(--radius-sm);cursor:pointer;margin-bottom:7px;transition:all .15s}
 .sig-card:hover{border-color:var(--border-hover);background:#1f2535}
 .sig-card.active{border:1px solid rgba(212,148,58,0.5);background:rgba(212,148,58,0.07)}
@@ -83,8 +103,6 @@ textarea:focus{border-color:var(--border-hover)}
 .sig-title{font-size:12px;font-weight:500;line-height:1.35}
 .sig-sowhat{font-size:12px;color:var(--muted);line-height:1.45;padding-left:21px}
 .no-signals{font-size:12px;color:var(--dim);font-style:italic}
-
-/* Detail panel */
 .detail{display:none;background:var(--surface);border:1px solid rgba(212,148,58,0.3);border-radius:var(--radius);padding:1.5rem;margin-top:.75rem}
 .detail-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:1.25rem}
 .detail-icon-row{display:flex;align-items:center;gap:10px}
@@ -93,11 +111,12 @@ textarea:focus{border-color:var(--border-hover)}
 .detail-sep{color:var(--dim)}
 .close-btn{background:none;border:1px solid var(--border);color:var(--muted);border-radius:var(--radius-sm);padding:6px 12px;font-size:12px;cursor:pointer;font-family:'DM Sans',sans-serif;white-space:nowrap;transition:all .15s;flex-shrink:0}
 .close-btn:hover{border-color:var(--border-hover);color:var(--text)}
-.detail-sowhat{background:rgba(212,148,58,0.08);border:1px solid rgba(212,148,58,0.2);border-radius:var(--radius-sm);padding:.875rem 1rem;margin-bottom:1.25rem;font-size:14px;line-height:1.65;color:var(--text)}
+.detail-sowhat{background:rgba(212,148,58,0.08);border:1px solid rgba(212,148,58,0.2);border-radius:var(--radius-sm);padding:.875rem 1rem;margin-bottom:1.25rem}
 .detail-sowhat-label{font-size:11px;font-weight:500;color:var(--amber);text-transform:uppercase;letter-spacing:.07em;margin-bottom:4px}
+.detail-sowhat p{font-size:14px;line-height:1.65;color:var(--text)}
 .detail-section{margin-bottom:14px}
 .detail-section-label{font-size:11px;font-weight:500;color:var(--muted);text-transform:uppercase;letter-spacing:.07em;margin-bottom:5px}
-.detail-section p{font-size:14px;line-height:1.7;color:var(--text);margin:0}
+.detail-section p{font-size:14px;line-height:1.7;color:var(--text)}
 .source-row{display:flex;gap:8px;margin-bottom:5px;align-items:baseline}
 .source-num{font-size:11px;color:var(--dim);flex-shrink:0;min-width:16px}
 .source-link{font-size:13px;color:var(--blue);text-decoration:none}
@@ -111,165 +130,182 @@ textarea:focus{border-color:var(--border-hover)}
 <body>
 <div class="wrap">
 
-  <div class="hero">
+  <div class="site-header">
     <div class="logo">
       <div class="logo-icon">&#9678;</div>
-      <span class="logo-name">Compass</span>
+      <div class="logo-text">
+        <p class="logo-name">Foresight Innovation Compass</p>
+        <p class="logo-sub">Strategic Intelligence for Global Development</p>
+      </div>
     </div>
-    <p class="hero-headline">Know what matters. Know what to do.</p>
-    <p class="hero-sub">Compass scans global development signals across 8 domains and tells you — in plain English — what to act on, what to watch, and what to ignore. Built for leaders who don't have time to read everything.</p>
+    <span class="header-tag">Updated weekly</span>
   </div>
 
-  <div class="input-section">
-    <label class="focus-label">What's your focus area?</label>
-    <textarea id="focusInput" rows="2" placeholder="e.g. Philanthropy strategy in Sub-Saharan Africa, or youth development in the Gulf..."></textarea>
-    <p class="examples-label">Not sure? Try one of these:</p>
-    <div class="chips" id="chips"></div>
+  <div class="hero">
+    <h1 class="hero-headline">The signals that matter,<br><em>already organized for you.</em></h1>
+    <p class="hero-body">Every week, Compass scans thousands of sources across 8 domains of global development — and surfaces what leaders need to act on, watch, and scale. No noise. No reading required. Just intelligence.</p>
+  </div>
+
+  <!-- Latest weekly scan -->
+  <div class="latest-section">
+    <div class="section-header">
+      <span class="section-title">This Week's Intelligence</span>
+      <span class="section-sub">Auto-updated every week &mdash; this is what subscribers receive</span>
+    </div>
+    <div id="latestContainer">
+      <div class="latest-loading" id="latestLoading">
+        <div class="mini-spinner"></div>
+        <span>Loading latest scan...</span>
+      </div>
+    </div>
+    <div id="latestResults" class="results"></div>
+    <div id="latestDetail" class="detail"></div>
+  </div>
+
+  <hr class="divider"/>
+
+  <!-- Custom scan -->
+  <div>
+    <div class="section-header">
+      <span class="section-title">Run Your Own Scan</span>
+      <span class="section-sub">Pick your domains and focus area</span>
+    </div>
+
+    <p class="focus-label" style="margin-bottom:10px">Select domains to include</p>
+    <div class="domains-grid" id="domainsGrid"></div>
+    <p class="domains-hint" id="domainsHint"></p>
+
+    <label class="focus-label">Your focus area</label>
+    <textarea id="focusInput" rows="2" placeholder="e.g. Philanthropy strategy in Sub-Saharan Africa, youth development in the Gulf..."></textarea>
+
     <button class="run-btn" id="runBtn" disabled>Run Scan &rarr;</button>
   </div>
 
   <div class="loading" id="loading">
     <div class="spinner"></div>
-    <p class="load-step" id="loadStep">Scanning global signals...</p>
-    <p class="load-note">Searching across 8 domains &mdash; takes about 30 seconds</p>
+    <p class="load-step" id="loadStep">Scanning selected domains...</p>
+    <p class="load-note">Takes about 20&ndash;30 seconds</p>
   </div>
-
   <div class="error" id="errorBox"></div>
+  <div id="customResults" class="results"></div>
+  <div id="customDetail" class="detail"></div>
 
-  <div class="results" id="results">
-
-    <div class="exec-card">
-      <div class="exec-top">
-        <div>
-          <p class="exec-label">The Big Picture</p>
-          <p class="exec-date" id="runDate"></p>
-        </div>
-        <span class="signal-badge" id="signalCount"></span>
-      </div>
-      <p class="exec-summary" id="execSummary"></p>
-    </div>
-
-    <p class="section-label">What connects all of this</p>
-    <div class="patterns-grid" id="patternsGrid"></div>
-
-    <p class="section-label">Your Intelligence Matrix</p>
-
-    <div class="matrix-intro">
-      <div class="legend-item"><div class="legend-dot" style="background:#4aad7a"></div><div class="legend-text"><strong>Amplify</strong>Strong signals. Act on these now.</div></div>
-      <div class="legend-item"><div class="legend-dot" style="background:#d4943a"></div><div class="legend-text"><strong>Anticipate</strong>Emerging trends. Get ahead of them.</div></div>
-      <div class="legend-item"><div class="legend-dot" style="background:#4a8fd4"></div><div class="legend-text"><strong>Adopt</strong>Proven solutions. Start this week.</div></div>
-      <div class="legend-item"><div class="legend-dot" style="background:#7a8099"></div><div class="legend-text"><strong>Explore</strong>Worth watching. Not urgent yet.</div></div>
-    </div>
-
-    <div class="matrix-grid">
-      <div class="quadrant" id="q-anticipate">
-        <div class="q-header">
-          <p class="q-name" style="color:var(--amber)">&#9650; Anticipate</p>
-          <p class="q-tagline">Emerging &mdash; get ahead of these</p>
-        </div>
-      </div>
-      <div class="quadrant" id="q-amplify">
-        <div class="q-header">
-          <p class="q-name" style="color:var(--green)">&#9650;&#9650; Amplify</p>
-          <p class="q-tagline">High impact &mdash; act on these now</p>
-        </div>
-      </div>
-      <div class="quadrant" id="q-explore">
-        <div class="q-header">
-          <p class="q-name" style="color:var(--muted)">&#9711; Explore</p>
-          <p class="q-tagline">Interesting &mdash; keep watching</p>
-        </div>
-      </div>
-      <div class="quadrant" id="q-adopt">
-        <div class="q-header">
-          <p class="q-name" style="color:var(--blue)">&#10003; Adopt</p>
-          <p class="q-tagline">Proven &mdash; start this week</p>
-        </div>
-      </div>
-    </div>
-    <p class="matrix-hint">Click any signal to understand it in plain English &darr;</p>
-
-    <div class="detail" id="detailPanel"></div>
-
-  </div>
 </div>
 
 <script>
-const EXAMPLES = [
-  "Philanthropy strategy in Sub-Saharan Africa",
-  "Youth development and human capability",
-  "Climate resilience and food security",
-  "Health innovation in the Global South",
-  "Education technology for underserved communities",
-  "Strategic partnerships in the Gulf"
+const DOMAINS = [
+  {id:'health',       icon:'&#9829;', color:'#d45a5a', label:'Health & Longevity'},
+  {id:'education',    icon:'&#9670;', color:'#4a8fd4', label:'Education & Skills'},
+  {id:'food',         icon:'&#10047;',color:'#4aad7a', label:'Food & Agriculture'},
+  {id:'water',        icon:'&#9673;', color:'#3aada8', label:'Water Security'},
+  {id:'energy',       icon:'&#9889;', color:'#d4943a', label:'Energy Transition'},
+  {id:'biodiversity', icon:'&#10031;',color:'#7aad4a', label:'Biodiversity & Climate'},
+  {id:'social',       icon:'&#9672;', color:'#8b7dd4', label:'Social Cohesion'},
+  {id:'philanthropy', icon:'&#9671;', color:'#c46fa0', label:'Philanthropy & Finance'},
 ];
 
-const DOMAIN_META = {
-  health:       {icon:'&#9829;', color:'#d45a5a', label:'Health'},
-  education:    {icon:'&#9670;', color:'#4a8fd4', label:'Education'},
-  food:         {icon:'&#10047;',color:'#4aad7a', label:'Food & Ag'},
-  water:        {icon:'&#9673;', color:'#3aada8', label:'Water'},
-  energy:       {icon:'&#9889;', color:'#d4943a', label:'Energy'},
-  biodiversity: {icon:'&#10031;',color:'#7aad4a', label:'Biodiversity'},
-  social:       {icon:'&#9672;', color:'#8b7dd4', label:'Social'},
-  philanthropy: {icon:'&#9671;', color:'#c46fa0', label:'Philanthropy'},
+const Q_META = {
+  anticipate:{name:'Anticipate', tagline:'Emerging &mdash; get ahead of these', color:'var(--amber)'},
+  amplify:   {name:'Amplify',    tagline:'High impact &mdash; act on these now', color:'var(--green)'},
+  explore:   {name:'Explore',    tagline:'Interesting &mdash; keep watching',    color:'var(--muted)'},
+  adopt:     {name:'Adopt',      tagline:'Proven &mdash; start this week',       color:'var(--blue)'},
 };
 
+const LEGEND = [
+  {color:'var(--green)', label:'Amplify',    desc:'Strong signals. Act on these now.'},
+  {color:'var(--amber)', label:'Anticipate', desc:'Emerging trends. Get ahead of them.'},
+  {color:'var(--blue)',  label:'Adopt',      desc:'Proven solutions. Start this week.'},
+  {color:'var(--muted)', label:'Explore',    desc:'Worth watching. Not urgent yet.'},
+];
+
 const STEPS = [
-  'Scanning global health and education signals...',
-  'Searching water, energy, and climate data...',
-  'Analyzing philanthropy and social innovation...',
+  'Searching selected domains...',
+  'Gathering evidence from the web...',
+  'Analyzing signals with AI...',
   'Building your intelligence matrix...',
 ];
 
-let selectedId = null;
+let selectedDomains = new Set(DOMAINS.map(d => d.id));
+let customSelectedId = null;
+let latestSelectedId = null;
 
-const focusInput = document.getElementById('focusInput');
-const runBtn = document.getElementById('runBtn');
-const chipsEl = document.getElementById('chips');
-const loadingEl = document.getElementById('loading');
-const loadStep = document.getElementById('loadStep');
-const errorBox = document.getElementById('errorBox');
-const resultsEl = document.getElementById('results');
-const detailPanel = document.getElementById('detailPanel');
-
-focusInput.addEventListener('input', () => { runBtn.disabled = !focusInput.value.trim(); });
-runBtn.addEventListener('click', runScan);
-
-EXAMPLES.forEach(ex => {
-  const chip = document.createElement('button');
-  chip.className = 'chip';
-  chip.textContent = ex;
-  chip.addEventListener('click', () => {
-    focusInput.value = ex;
-    runBtn.disabled = false;
-    runScan();
+// Build domain checklist
+const grid = document.getElementById('domainsGrid');
+DOMAINS.forEach(d => {
+  const item = document.createElement('label');
+  item.className = 'domain-check selected';
+  item.setAttribute('data-id', d.id);
+  item.innerHTML = `<input type="checkbox" checked><span class="check-box">&#10003;</span><span class="domain-icon" style="color:${d.color}">${d.icon}</span><span class="domain-label">${d.label}</span>`;
+  item.querySelector('input').addEventListener('change', e => {
+    if (e.target.checked) { selectedDomains.add(d.id); item.classList.add('selected'); }
+    else { selectedDomains.delete(d.id); item.classList.remove('selected'); }
+    updateHint();
+    updateRunBtn();
   });
-  chipsEl.appendChild(chip);
+  grid.appendChild(item);
 });
 
-async function runScan() {
-  const focus = focusInput.value.trim();
-  if (!focus || runBtn.disabled) return;
+function updateHint() {
+  const n = selectedDomains.size;
+  const el = document.getElementById('domainsHint');
+  el.textContent = n === 8 ? 'All 8 domains selected.' : n === 0 ? 'Select at least one domain.' : `${n} of 8 domains selected.`;
+}
+function updateRunBtn() {
+  const focus = document.getElementById('focusInput').value.trim();
+  document.getElementById('runBtn').disabled = selectedDomains.size === 0 || !focus;
+}
+updateHint();
+
+document.getElementById('focusInput').addEventListener('input', updateRunBtn);
+document.getElementById('runBtn').addEventListener('click', runCustomScan);
+
+// Load latest scan
+(async function loadLatest() {
+  const container = document.getElementById('latestContainer');
+  try {
+    const res = await fetch('/api/latest');
+    const data = await res.json();
+    if (!res.ok || data.error) throw new Error(data.error);
+    container.innerHTML = '';
+    renderMatrix(data, document.getElementById('latestResults'), document.getElementById('latestDetail'), 'latest');
+    document.getElementById('latestResults').style.display = 'block';
+  } catch(err) {
+    container.innerHTML = `<div class="latest-empty">No weekly scan available yet. Check back after the first scheduled run.</div>`;
+  }
+})();
+
+async function runCustomScan() {
+  const focus = document.getElementById('focusInput').value.trim();
+  if (!focus || selectedDomains.size === 0) return;
+  const runBtn = document.getElementById('runBtn');
+  const loadingEl = document.getElementById('loading');
+  const errorBox = document.getElementById('errorBox');
+  const resultsEl = document.getElementById('customResults');
+  const detailEl = document.getElementById('customDetail');
+
   runBtn.disabled = true;
   loadingEl.style.display = 'flex';
   errorBox.style.display = 'none';
   resultsEl.style.display = 'none';
-  selectedId = null;
+  detailEl.style.display = 'none';
+  customSelectedId = null;
+
   let si = 0;
-  loadStep.textContent = STEPS[0];
-  const stepInt = setInterval(() => { if (si < STEPS.length - 1) loadStep.textContent = STEPS[++si]; }, 7000);
+  document.getElementById('loadStep').textContent = STEPS[0];
+  const stepInt = setInterval(() => { if (si < STEPS.length-1) document.getElementById('loadStep').textContent = STEPS[++si]; }, 6000);
 
   try {
     const res = await fetch('/api/analyze', {
       method: 'POST',
       headers: {'Content-Type':'application/json'},
-      body: JSON.stringify({ focusArea: focus }),
+      body: JSON.stringify({ focusArea: focus, domains: Array.from(selectedDomains) }),
     });
     clearInterval(stepInt);
     const data = await res.json();
     if (!res.ok || data.error) throw new Error(data.error || 'Request failed');
-    renderResults(data);
+    renderMatrix(data, resultsEl, detailEl, 'custom');
+    resultsEl.style.display = 'block';
+    resultsEl.scrollIntoView({behavior:'smooth', block:'start'});
   } catch(err) {
     clearInterval(stepInt);
     errorBox.textContent = 'Something went wrong: ' + (err.message || 'Please try again.');
@@ -277,98 +313,109 @@ async function runScan() {
   } finally {
     loadingEl.style.display = 'none';
     runBtn.disabled = false;
+    updateRunBtn();
   }
 }
 
-function renderResults(scan) {
-  document.getElementById('runDate').textContent = scan.runDate || '';
-  document.getElementById('signalCount').textContent = (scan.signals?.length || 0) + ' signals identified';
-  document.getElementById('execSummary').textContent = scan.executiveSummary || '';
+function renderMatrix(scan, resultsEl, detailEl, prefix) {
+  const domainMap = {};
+  DOMAINS.forEach(d => { domainMap[d.id] = d; });
 
-  const pg = document.getElementById('patternsGrid');
-  pg.innerHTML = '';
-  (scan.crossCuttingPatterns || []).forEach(p => {
+  resultsEl.innerHTML = `
+    <div class="exec-card">
+      <div class="exec-top">
+        <div>
+          <p class="exec-meta-label">The Big Picture</p>
+          <p class="exec-date">${scan.runDate || ''}</p>
+        </div>
+        <span class="signal-badge">${scan.signals?.length || 0} signals identified</span>
+      </div>
+      <p class="exec-summary">${scan.executiveSummary || ''}</p>
+    </div>
+    <p style="font-size:11px;font-weight:500;color:var(--dim);text-transform:uppercase;letter-spacing:.08em;margin-bottom:10px">What connects all of this</p>
+    <div class="patterns-grid" id="${prefix}-patterns"></div>
+    <p style="font-size:11px;font-weight:500;color:var(--dim);text-transform:uppercase;letter-spacing:.08em;margin-bottom:10px">Intelligence Matrix</p>
+    <div class="matrix-legend" id="${prefix}-legend"></div>
+    <div class="matrix-grid">
+      <div class="quadrant" id="${prefix}-q-anticipate"></div>
+      <div class="quadrant" id="${prefix}-q-amplify"></div>
+      <div class="quadrant" id="${prefix}-q-explore"></div>
+      <div class="quadrant" id="${prefix}-q-adopt"></div>
+    </div>
+    <p class="matrix-hint">Click any signal for a plain-English breakdown &darr;</p>
+  `;
+
+  const pg = document.getElementById(prefix+'-patterns');
+  (scan.crossCuttingPatterns||[]).forEach(p => {
     pg.innerHTML += `<div class="pattern-card"><p class="pattern-title">${p.title}</p><p class="pattern-desc">${p.description}</p></div>`;
   });
 
-  ['anticipate','amplify','explore','adopt'].forEach(q => {
-    const el = document.getElementById('q-' + q);
-    const existing = el.querySelector('.q-header');
-    el.innerHTML = '';
-    if (existing) el.appendChild(existing);
-    const signals = (scan.signals || []).filter(s => s.quadrant === q);
-    if (!signals.length) {
-      el.innerHTML += '<p class="no-signals">No signals placed here</p>';
-    } else {
-      signals.forEach(sig => {
-        const dm = DOMAIN_META[sig.domain] || {icon:'&middot;',color:'#7a8099',label:sig.domain};
-        const card = document.createElement('div');
-        card.className = 'sig-card';
-        card.setAttribute('data-id', sig.id);
-        card.innerHTML = `<div class="sig-top"><span class="sig-icon" style="color:${dm.color}">${dm.icon}</span><span class="sig-title">${sig.title}</span></div><p class="sig-sowhat">${sig.soWhat || sig.strategicImplication || ''}</p>`;
-        card.addEventListener('click', () => toggleDetail(sig));
-        el.appendChild(card);
-      });
-    }
+  const lg = document.getElementById(prefix+'-legend');
+  LEGEND.forEach(l => {
+    lg.innerHTML += `<div class="legend-item"><div class="legend-dot" style="background:${l.color}"></div><div class="legend-text"><strong>${l.label}</strong>${l.desc}</div></div>`;
   });
 
-  detailPanel.style.display = 'none';
-  resultsEl.style.display = 'block';
-  resultsEl.scrollIntoView({behavior:'smooth', block:'start'});
+  ['anticipate','amplify','explore','adopt'].forEach(q => {
+    const el = document.getElementById(prefix+'-q-'+q);
+    const meta = Q_META[q];
+    el.innerHTML = `<div class="q-header"><p class="q-name" style="color:${meta.color}">${meta.name}</p><p class="q-tagline">${meta.tagline}</p></div>`;
+    const signals = (scan.signals||[]).filter(s=>s.quadrant===q);
+    if (!signals.length) { el.innerHTML += '<p class="no-signals">No signals placed here</p>'; }
+    else { signals.forEach(sig => {
+      const dm = domainMap[sig.domain]||{icon:'&middot;',color:'#7a8099',label:sig.domain};
+      const card = document.createElement('div');
+      card.className = 'sig-card';
+      card.setAttribute('data-id', sig.id);
+      card.innerHTML = `<div class="sig-top"><span class="sig-icon" style="color:${dm.color}">${dm.icon}</span><span class="sig-title">${sig.title}</span></div><p class="sig-sowhat">${sig.soWhat||sig.strategicImplication||''}</p>`;
+      card.addEventListener('click', () => toggleDetail(sig, domainMap, detailEl, prefix));
+      el.appendChild(card);
+    }); }
+  });
 }
 
-function toggleDetail(sig) {
-  if (selectedId === sig.id) {
-    selectedId = null;
-    detailPanel.style.display = 'none';
-    document.querySelectorAll('.sig-card').forEach(c => c.classList.remove('active'));
+function toggleDetail(sig, domainMap, detailEl, prefix) {
+  const cards = detailEl.closest('.wrap') ? detailEl.previousElementSibling?.querySelectorAll('.sig-card') : document.querySelectorAll('.sig-card');
+  const selectedIdKey = prefix === 'latest' ? 'latestSelectedId' : 'customSelectedId';
+
+  if ((prefix==='latest'?latestSelectedId:customSelectedId) === sig.id) {
+    if (prefix==='latest') latestSelectedId=null; else customSelectedId=null;
+    detailEl.style.display = 'none';
+    document.querySelectorAll(`[data-id="${sig.id}"]`).forEach(c=>c.classList.remove('active'));
     return;
   }
-  selectedId = sig.id;
-  document.querySelectorAll('.sig-card').forEach(c => c.classList.toggle('active', c.getAttribute('data-id') === sig.id));
+  if (prefix==='latest') latestSelectedId=sig.id; else customSelectedId=sig.id;
+  document.querySelectorAll('.sig-card').forEach(c=>c.classList.toggle('active', c.getAttribute('data-id')===sig.id));
 
-  const dm = DOMAIN_META[sig.domain] || {icon:'&middot;',color:'#7a8099',label:sig.domain};
-  const confClass = 'conf-' + (sig.confidenceTier || 'low');
-  const qLabels = {amplify:'Amplify',anticipate:'Anticipate',adopt:'Adopt',explore:'Explore'};
-  const sources = (sig.evidenceSources || []).map((s,i) =>
+  const dm = domainMap[sig.domain]||{icon:'&middot;',color:'#7a8099',label:sig.domain};
+  const qLabels={amplify:'Amplify',anticipate:'Anticipate',adopt:'Adopt',explore:'Explore'};
+  const sources=(sig.evidenceSources||[]).map((s,i)=>
     `<div class="source-row"><span class="source-num">${i+1}.</span>${s.url
-      ? `<a class="source-link" href="${s.url}" target="_blank" rel="noopener">${s.sourceName ? s.sourceName+' &middot; ':'' }${s.title}</a>`
-      : `<span class="source-text">${s.sourceName ? s.sourceName+' &middot; ':''}${s.title}</span>`
-    }</div>`
-  ).join('');
+      ?`<a class="source-link" href="${s.url}" target="_blank" rel="noopener">${s.sourceName?s.sourceName+' &middot; ':''}${s.title}</a>`
+      :`<span class="source-text">${s.sourceName?s.sourceName+' &middot; ':''}${s.title}</span>`
+    }</div>`).join('');
 
-  detailPanel.innerHTML = `
+  detailEl.innerHTML = `
     <div class="detail-top">
       <div class="detail-icon-row">
         <span style="font-size:22px;color:${dm.color}">${dm.icon}</span>
         <div>
           <p class="detail-title">${sig.title}</p>
           <div class="detail-meta">
-            <span>${dm.label}</span>
-            <span class="detail-sep">&middot;</span>
-            <span>${qLabels[sig.quadrant]||sig.quadrant}</span>
-            <span class="detail-sep">&middot;</span>
-            <span class="${confClass}">${sig.confidenceTier} confidence</span>
+            <span>${dm.label}</span><span class="detail-sep">&middot;</span>
+            <span>${qLabels[sig.quadrant]||sig.quadrant}</span><span class="detail-sep">&middot;</span>
+            <span class="conf-${sig.confidenceTier||'low'}">${sig.confidenceTier} confidence</span>
           </div>
         </div>
       </div>
-      <button class="close-btn" id="closeDetail">Close &times;</button>
+      <button class="close-btn" onclick="this.closest('.detail').style.display='none'">Close &times;</button>
     </div>
-    <div class="detail-sowhat">
-      <p class="detail-sowhat-label">Why you should care</p>
-      <p>${sig.soWhat || sig.whyItMatters || ''}</p>
-    </div>
+    <div class="detail-sowhat"><p class="detail-sowhat-label">Why you should care</p><p>${sig.soWhat||sig.whyItMatters||''}</p></div>
     <div class="detail-section"><p class="detail-section-label">What's happening</p><p>${sig.summary||''}</p></div>
     <div class="detail-section"><p class="detail-section-label">What to do</p><p>${sig.recommendedAction||''}</p></div>
-    ${sources ? `<div class="detail-section"><p class="detail-section-label">Where this comes from</p>${sources}</div>` : ''}
+    ${sources?`<div class="detail-section"><p class="detail-section-label">Where this comes from</p>${sources}</div>`:''}
   `;
-  document.getElementById('closeDetail').addEventListener('click', () => {
-    selectedId = null;
-    detailPanel.style.display = 'none';
-    document.querySelectorAll('.sig-card').forEach(c => c.classList.remove('active'));
-  });
-  detailPanel.style.display = 'block';
-  detailPanel.scrollIntoView({behavior:'smooth', block:'nearest'});
+  detailEl.style.display = 'block';
+  detailEl.scrollIntoView({behavior:'smooth', block:'nearest'});
 }
 </script>
 </body>
